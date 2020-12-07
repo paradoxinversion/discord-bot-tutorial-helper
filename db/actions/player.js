@@ -19,4 +19,17 @@ const registerPlayer = async (user) => {
   }
 };
 
-module.exports = { registerPlayer };
+const getPoints = async (user) => {
+  try {
+    const player = await Player.findOne({ discordUserId: user.id });
+    if (!player) {
+      return "Unfortunately, you are not registered for the keyword game. :(";
+    }
+
+    return `You have ${player.points} points!`;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+module.exports = { registerPlayer, getPoints };

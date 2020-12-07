@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
-const chai = require("chai");
-const expect = chai.expect;
 const gameActions = require("../gameActions");
 const Player = require("../db/models/player");
 const setupDB = require("../db/client");
+const chai = require("chai");
+const expect = chai.expect;
 
 describe("gameActions", function () {
   before(function (done) {
@@ -14,7 +14,6 @@ describe("gameActions", function () {
       });
       testPlayer.save(function (err) {
         if (err) console.log(err);
-
         done();
       });
     });
@@ -45,7 +44,6 @@ describe("gameActions", function () {
       expect(parseResult.result).to.eql(true);
       expect(player.points).to.eql(20);
       expect(player.lastCorrectGuess).to.eql("awesome");
-      console.log(player);
     });
 
     it("Should not grant multiple 'wins' on the same keyword.", async function () {
