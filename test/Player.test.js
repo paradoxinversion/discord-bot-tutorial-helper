@@ -1,9 +1,7 @@
 const mongoose = require("mongoose");
 const chai = require("chai");
 const expect = chai.expect;
-const chaiAsPromised = require("chai-as-promised");
 const playerActions = require("../db/actions/player");
-const Player = require("../db/models/player");
 const setupDB = require("../db/client");
 
 describe("UserActions", function () {
@@ -15,10 +13,17 @@ describe("UserActions", function () {
   });
 
   describe("registerPlayer", function () {
-    beforeEach(async function () {
-      await mongoose.connection.dropDatabase();
-    });
     it("Should register a user", async function () {
+      const testUserData = {
+        id: "testId1",
+      };
+      const registrationResponse = await playerActions.registerPlayer(
+        testUserData
+      );
+      expect(registrationResponse.result).to.equal(true);
+    });
+
+    it("Should fail if a user tries to register twice", async function () {
       const testUserData = {
         id: "testId1",
       };
@@ -26,7 +31,16 @@ describe("UserActions", function () {
       const registrationResponse = await playerActions.registerPlayer(
         testUserData
       );
-      expect(registrationResponse.result).to.equal(true);
+      expect(registrationResponse.result).to.equal(false);
+      expect(registrationResponse.error).to.equal(
+        "A user with that Discord ID already exists."
+      );
+    });
+  });
+
+  after(function (done) {
+    mongoose.connection.db.dropDatabase(function () {
+      mongoose.connection.close(done);
     });
   });
 });
